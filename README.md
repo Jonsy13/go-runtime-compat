@@ -240,6 +240,108 @@ if command -v go-runtime-compat &> /dev/null; then
 fi
 ```
 
+## AI Agent Integration
+
+`go-runtime-compat` works seamlessly with AI coding assistants and autonomous agents. The JSON output format is designed for programmatic consumption.
+
+### For AI Agents
+
+When working with AI agents (Claude, GPT, Copilot, etc.), use JSON output for structured analysis:
+
+```bash
+go-runtime-compat analyze --project . --dockerfile ./Dockerfile --output json
+```
+
+**Example JSON output:**
+
+```json
+{
+  "findings": [
+    {
+      "rule_id": "CCG100",
+      "category": "correlation",
+      "severity": "error",
+      "message": "Shell command 'bash' used but Dockerfile uses scratch which has no shell",
+      "location": "main.go:42",
+      "suggestion": "Use a base image with a shell or remove shell command usage"
+    }
+  ],
+  "summary": {
+    "total_findings": 1,
+    "error_count": 1,
+    "warning_count": 0,
+    "info_count": 0,
+    "passed": false
+  }
+}
+```
+
+### Agent System Prompt
+
+Add this to your AI agent's system prompt for container-aware Go development:
+
+```
+When working on Go projects with Dockerfiles, run `go-runtime-compat analyze --project . --dockerfile ./Dockerfile --output json` to detect container compatibility issues before deployment. Parse the JSON output to identify:
+- exec.Command calls that may fail in minimal containers
+- CGO dependencies incompatible with scratch/alpine images  
+- Missing binaries in the target container environment
+
+Always address "error" severity findings before building container images.
+```
+
+### MCP Server Integration
+
+For Model Context Protocol (MCP) compatible agents, expose `go-runtime-compat` as a tool:
+
+```json
+{
+  "name": "analyze_container_compatibility",
+  "description": "Analyze Go project for container runtime compatibility issues",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "project_path": {
+        "type": "string",
+        "description": "Path to Go project directory"
+      },
+      "dockerfile_path": {
+        "type": "string",
+        "description": "Path to Dockerfile"
+      }
+    },
+    "required": ["project_path"]
+  }
+}
+```
+
+**Tool implementation:**
+
+```bash
+go-runtime-compat analyze --project "$project_path" --dockerfile "$dockerfile_path" --output json
+```
+
+### Agentic Workflow Example
+
+```python
+import subprocess
+import json
+
+def check_container_compatibility(project_path: str, dockerfile_path: str = None) -> dict:
+    """Run go-runtime-compat and return structured findings."""
+    cmd = ["go-runtime-compat", "analyze", "--project", project_path, "--output", "json"]
+    if dockerfile_path:
+        cmd.extend(["--dockerfile", dockerfile_path])
+    
+    result = subprocess.run(cmd, capture_output=True, text=True)
+    return json.loads(result.stdout)
+
+# Use in agent loop
+findings = check_container_compatibility("./myapp", "./Dockerfile")
+if not findings["summary"]["passed"]:
+    errors = [f for f in findings["findings"] if f["severity"] == "error"]
+    # Agent can now reason about and fix these issues
+```
+
 ## Best Practices
 
 ### Scratch / Distroless Images
