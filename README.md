@@ -37,7 +37,33 @@ Building Go applications for containers seems straightforward until runtime fail
 
 ## Installation
 
-### Quick Install
+### Download Binary
+
+Download the latest release for your platform from [GitHub Releases](https://github.com/Jonsy13/go-runtime-compat/releases):
+
+```bash
+# Linux (amd64)
+curl -LO https://github.com/Jonsy13/go-runtime-compat/releases/latest/download/go-runtime-compat_linux_amd64.tar.gz
+tar -xzf go-runtime-compat_linux_amd64.tar.gz
+sudo mv go-runtime-compat /usr/local/bin/
+
+# Linux (arm64)
+curl -LO https://github.com/Jonsy13/go-runtime-compat/releases/latest/download/go-runtime-compat_linux_arm64.tar.gz
+tar -xzf go-runtime-compat_linux_arm64.tar.gz
+sudo mv go-runtime-compat /usr/local/bin/
+
+# macOS (Apple Silicon)
+curl -LO https://github.com/Jonsy13/go-runtime-compat/releases/latest/download/go-runtime-compat_darwin_arm64.tar.gz
+tar -xzf go-runtime-compat_darwin_arm64.tar.gz
+sudo mv go-runtime-compat /usr/local/bin/
+
+# macOS (Intel)
+curl -LO https://github.com/Jonsy13/go-runtime-compat/releases/latest/download/go-runtime-compat_darwin_amd64.tar.gz
+tar -xzf go-runtime-compat_darwin_amd64.tar.gz
+sudo mv go-runtime-compat /usr/local/bin/
+```
+
+### Go Install
 
 ```bash
 go install github.com/Jonsy13/go-runtime-compat@latest
