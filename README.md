@@ -4,7 +4,7 @@
 
 **Catch container runtime issues before they catch you**
 
-[![Go Version](https://img.shields.io/badge/Go-1.21+-00ADD8?style=flat&logo=go)](https://go.dev/)
+[![Go Version](https://img.shields.io/badge/Go-1.25+-00ADD8?style=flat&logo=go)](https://go.dev/)
 [![Go Report Card](https://goreportcard.com/badge/github.com/Jonsy13/go-runtime-compat)](https://goreportcard.com/report/github.com/Jonsy13/go-runtime-compat)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -178,7 +178,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.21'
+          go-version: '1.25'
       
       - name: Install go-runtime-compat
         run: go install github.com/Jonsy13/go-runtime-compat@latest
@@ -191,7 +191,7 @@ jobs:
 
 ```yaml
 container-compatibility:
-  image: golang:1.21
+  image: golang:1.25
   stage: test
   script:
     - go install github.com/Jonsy13/go-runtime-compat@latest
@@ -219,7 +219,7 @@ fi
 ### Scratch / Distroless Images
 
 ```dockerfile
-FROM golang:1.21 AS builder
+FROM golang:1.25 AS builder
 WORKDIR /app
 COPY . .
 
@@ -242,7 +242,7 @@ ENTRYPOINT ["/server"]
 ### Alpine Images
 
 ```dockerfile
-FROM golang:1.21-alpine AS builder
+FROM golang:1.25-alpine AS builder
 WORKDIR /app
 
 # Option 1: Disable CGO (recommended)
